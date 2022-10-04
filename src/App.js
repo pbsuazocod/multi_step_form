@@ -1,22 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { TextField, Button } from "@mui/material";
+import { Formik, useFormik } from "formik";
+import * as yup from "yup";
+import "./App.css";
+
+const validationSchema = yup.object({
+  name: yup.string().required("Name is required"),
+});
 
 function App() {
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+    },
+    validationSchema: { validationSchema },
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+
   return (
-    <div className="App">
+    <div className=" flex flex-col items-center justify-center h-screen bg-red-300 w-screen">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <form className="" onSubmit={formik.handleSubmit}>
+          <TextField
+            fullWidth
+            id="name"
+            name="name"
+            label="Name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
+          />
+
+          <div className="mt-4">
+            <Button type="submit" color="primary" variant="contained" fullWidth>
+              Submit
+            </Button>
+          </div>
+        </form>
       </header>
     </div>
   );
